@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	_ "embed"
 	"flag"
 	"fmt"
 	"log"
@@ -36,12 +37,17 @@ const htmlTemplate = `
     </body>
 </html>`
 
+//go:embed default.css
+var defaultCss []byte
+
 var cssFile string
 var noCSS bool
+var showCss bool
 
 func init() {
 	flag.StringVar(&cssFile, "cssFile", "default.css", "the css file to apply")
 	flag.BoolVar(&noCSS, "nocss", false, "if set, don't apply any css")
+	flag.BoolVar(&showCss, "showcss", false, "if set, print the CSS to the screen and exit")
 }
 
 func check(err error) {
@@ -137,6 +143,21 @@ func findTitle(markdownContents []byte) string {
 
 func main() {
 	flag.Parse()
+	var cssContents []byte
+	var err error
+	if !noCSS {
+		if cssFile == "default.css" {
+			cssContents = defaultCss
+		} else {
+			cssContents, err = os.ReadFile(cssFile)
+			check(err)
+		}
+	}
+	if showCss {
+		fmt.Printf("Here's the CSS that will be used:\n\n%v\n", string(cssContents))
+		os.Exit(0)
+	}
+
 	if flag.NArg() == 0 {
 		flag.Usage()
 		fmt.Println("\tpositional arg: <markdownFile>")
@@ -148,12 +169,6 @@ func main() {
 	htmlFilename := fmt.Sprintf("%v.html", outputName)
 	pdfFilename := fmt.Sprintf("%v.pdf", outputName)
 
-	var cssContents []byte
-	var err error
-	if !noCSS {
-		cssContents, err = os.ReadFile(cssFile)
-		check(err)
-	}
 	writeMdToHtml(markdownFilename, htmlFilename, cssContents)
 	writeHtmlToPdf(htmlFilename, pdfFilename)
 }
