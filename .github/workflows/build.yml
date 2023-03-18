@@ -3,9 +3,9 @@ name: build
 on:
   push:
     branches:
-      - "master"
+      - main
     tags:
-      - "v*"
+      - v*
   pull_request:
 
 jobs:
