@@ -1,1 +1,154 @@
-../../resume-generator/default.css
+/* Colors are from the catppuccin pallette. https://github.com/catppuccin/catppuccin */
+
+/* The main page settings. */
+body {
+    /* Color of all text */
+    /* Latte 'Text' */
+    color: #4c4f69;
+    /* Color of the backdrop that the resume paper "sits" on */
+    /* Latte 'Base' */
+    background: #eff1f5;
+    font: 1.1em "Times New Roman";
+    line-height: 1.2;
+    margin: 40px 0;
+}
+
+#resume {
+    margin: 0 auto;
+    max-width: 800px;
+    padding: 40px 60px;
+    /* Color of the "paper" the resume is written on */
+    /* Latte 'Crust' */
+    background: #dce0e8;
+    /* Latte 'Surface0' */
+    border: 1px solid #ccd0da;
+    /* Latte 'Overlay2' */
+    box-shadow: 2px 2px 4px #7c7f93;
+    -webkit-box-shadow: 2px 2px 4px #7c7f93;
+}
+
+a {
+    color: #1e66f5;
+}
+
+h1 {
+    text-transform: uppercase;
+    text-align: center;
+    font-size: 200%;
+    margin: 0;
+    padding: 0;
+}
+
+h2 {
+    border-bottom: 1px solid #1e1e2e;
+    text-transform: uppercase;
+    font-size: 130%;
+    margin: 1em 0 0 0;
+    padding: 0;
+}
+
+h3 {
+    font-size: 100%;
+    margin: 0.8em 0 0.3em 0;
+    padding: 0;
+    display: flex;
+    justify-content: space-between;
+}
+
+p {
+    margin: 0 0 0.5em 0;
+    padding: 0;
+}
+
+ul {
+    padding: 0;
+    margin: 0 1.5em;
+    /* Latte 'Subtext1' */
+    color: #5c5f77;
+    font-size: 90%;
+}
+
+/* ul immediately after h1 = contact list */
+h1+ul {
+    text-align: center;
+    margin: 0;
+    padding: 0;
+}
+
+h1+ul>li {
+    display: inline;
+    white-space: pre;
+    list-style-type: none;
+}
+
+h1+ul>li:after {
+    content: "  \2022  ";
+}
+
+h1+ul>li:last-child:after {
+    content: "";
+}
+
+/* p immediately after contact list = summary */
+h1+ul+p {
+    margin: 1em 0;
+}
+
+@media print {
+    body {
+        font-size: 10pt;
+        margin: 0;
+        padding: 0;
+        background: none;
+    }
+
+    #resume {
+        margin: 0;
+        padding: 0;
+        border: 0px;
+        background: none;
+        box-shadow: none;
+        -webkit-box-shadow: none;
+    }
+
+    /* Do not underline abbr tags in PDF */
+    abbr {
+        text-decoration: none;
+        font-variant: none;
+    }
+
+    /* Make links black in PDF */
+    /* Move this outside the print block to apply this in HTML too */
+    a,
+    a:link,
+    a:visited,
+    a:hover {
+        color: #000000;
+        text-decoration: underline;
+    }
+}
+
+@page {
+    /* Change margins and paper size of PDF */
+    /* https://developer.mozilla.org/en-US/docs/Web/CSS/@page */
+    size: letter;
+    margin: 0.3in 0.6in;
+}
+
+@media screen and (max-width: 800px) {
+    body {
+        font-size: 16pt;
+        margin: 0;
+        padding: 0;
+        background: #FFFFFF !important;
+    }
+
+    #resume {
+        margin: 0;
+        padding: 1em;
+        border: 0px;
+        background: none;
+        box-shadow: none;
+        -webkit-box-shadow: none;
+    }
+}
