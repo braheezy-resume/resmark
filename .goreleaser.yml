@@ -12,11 +12,6 @@ builds:
       - darwin
     goarch:
       - amd64
-archives:
-  - name_template: >-
-      {{ .ProjectName }}_
-      {{- title .Os }}_
-      {{ .Arch }}{{ end }}
 checksum:
   name_template: "checksums.txt"
 snapshot:
