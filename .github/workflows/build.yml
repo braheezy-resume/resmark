@@ -38,7 +38,7 @@ jobs:
       - name: Release Go binaries on tags
         uses: goreleaser/goreleaser-action@v4
         with:
-          version: '1.20'
+          version: latest
           args: release --clean
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
