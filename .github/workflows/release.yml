@@ -1,6 +1,7 @@
 name: release
 
 on:
+  # Only run after build workflow is done
   workflow_run:
     workflows:
       - build
