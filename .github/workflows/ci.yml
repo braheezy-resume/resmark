@@ -37,7 +37,7 @@ jobs:
         run: go build -v ./...
 
   release:
-    if: contains(github.event.ref, '/tags/')
+    if: startsWith(github.ref, 'refs/tags/')
     needs: build
     permissions:
       contents: write
