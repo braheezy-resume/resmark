@@ -2,8 +2,9 @@ name: ci
 
 on:
   push:
-    branches:
-      - main
+    paths:
+      - '*.go'
+      - go.mod
     tags:
       - v*
   pull_request:
