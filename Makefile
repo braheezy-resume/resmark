@@ -1,4 +1,4 @@
-PACKAGE = resmark
+PACKAGE = resumerk
 BUILD_DIR = $(PWD)/dist
 # The specific binaries for each supported platform
 LINUX_BIN = $(BUILD_DIR)/$(PACKAGE)_linux_amd64_v1/$(PACKAGE)

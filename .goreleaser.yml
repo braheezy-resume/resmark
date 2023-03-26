@@ -1,4 +1,4 @@
-project_name: resmark
+project_name: resumerk
 before:
   hooks:
     - go mod tidy
