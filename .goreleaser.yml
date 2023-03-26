@@ -16,6 +16,8 @@ archives:
   - format_overrides:
       - goos: windows
         format: zip
+    files:
+      - sample.md
 checksum:
   name_template: "checksums.txt"
 snapshot:
