@@ -24,7 +24,7 @@ func TestWriteMdToHtml(t *testing.T) {
 	err := os.WriteFile("test.md", []byte(mdStr), 0644)
 	check(err)
 
-	writeMdToHtml("test.md", "test.html", []byte{})
+	writeMdToHtml("test.md", "test.html", []byte{}, []byte{})
 
 	expectedHtmlStr := `
 <!DOCTYPE html>
@@ -32,6 +32,9 @@ func TestWriteMdToHtml(t *testing.T) {
     <head>
         <meta charset="UTF-8">
         <title>header</title>
+        <script>
+
+        </script>
         <style>
 
         </style>

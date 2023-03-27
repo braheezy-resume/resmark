@@ -26,6 +26,9 @@ const htmlTemplate = `
     <head>
         <meta charset="UTF-8">
         <title>{{.Title}}</title>
+        <script>
+{{.JSContent}}
+        </script>
         <style>
 {{.CSSContent}}
         </style>
@@ -40,14 +43,23 @@ const htmlTemplate = `
 //go:embed default.css
 var defaultCss []byte
 
+//go:embed default.js
+var defaultJss []byte
+
 var cssFile string
 var noCSS bool
 var showCss bool
+var jsFile string
+var noJS bool
+var showJs bool
 
 func init() {
-	flag.StringVar(&cssFile, "cssFile", "default.css", "the css file to apply")
-	flag.BoolVar(&noCSS, "nocss", false, "if set, don't apply any css")
-	flag.BoolVar(&showCss, "showcss", false, "if set, print the CSS to the screen and exit")
+	flag.StringVar(&cssFile, "cssFile", "default.css", "the CSS file to apply")
+	flag.BoolVar(&noCSS, "nocss", false, "if set, don't apply any CSS")
+	flag.BoolVar(&showCss, "showcss", false, "if set, print the final CSS to the screen and exit")
+	flag.StringVar(&jsFile, "jsFile", "default.js", "the JSS file to apply")
+	flag.BoolVar(&noJS, "nojs", false, "if set, don't apply any JS")
+	flag.BoolVar(&showJs, "showjs", false, "if set, print the JS to the screen and exit")
 }
 
 func check(err error) {
@@ -56,7 +68,7 @@ func check(err error) {
 	}
 }
 
-func writeMdToHtml(inFile string, outFile string, cssContents []byte) {
+func writeMdToHtml(inFile string, outFile string, cssContents []byte, jsContents []byte) {
 	outFile, err := filepath.Abs(outFile)
 	check(err)
 	inFile, err = filepath.Abs(inFile)
@@ -82,10 +94,12 @@ func writeMdToHtml(inFile string, outFile string, cssContents []byte) {
 		Title      string
 		Resume     template.HTML
 		CSSContent template.CSS
+		JSContent  template.JS
 	}{
 		Title:      findTitle(mdData),
 		Resume:     template.HTML(html),
 		CSSContent: template.CSS(cssContents),
+		JSContent:  template.JS(jsContents),
 	}
 	f, err := os.Create(outFile)
 	check(err)
@@ -158,6 +172,20 @@ func main() {
 		os.Exit(0)
 	}
 
+	var jsContents []byte
+	if !noJS {
+		if jsFile == "default.js" {
+			jsContents = defaultJss
+		} else {
+			jsContents, err = os.ReadFile(jsFile)
+			check(err)
+		}
+	}
+	if showJs {
+		fmt.Printf("Here's the JS that will be used:\n\n%v\n", string(jsContents))
+		os.Exit(0)
+	}
+
 	if flag.NArg() == 0 {
 		flag.Usage()
 		fmt.Println("\tpositional arg: <markdownFile>")
@@ -169,6 +197,6 @@ func main() {
 	htmlFilename := fmt.Sprintf("%v.html", outputName)
 	pdfFilename := fmt.Sprintf("%v.pdf", outputName)
 
-	writeMdToHtml(markdownFilename, htmlFilename, cssContents)
+	writeMdToHtml(markdownFilename, htmlFilename, cssContents, jsContents)
 	writeHtmlToPdf(htmlFilename, pdfFilename)
 }
