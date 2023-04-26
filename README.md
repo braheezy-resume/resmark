@@ -1,13 +1,15 @@
-# resmark
+# resumerk
 
-A pure Go project to convert a Resume Markdown file to HTML and PDF. No system dependencies are needed.
+A pure Go implementation to convert a Resume Markdown file to HTML and PDF.
+
+This project requires no system dependencies.
 
 ## Installation
 Use one of the [pre-compiled binaries in the Releases](https://github.com/braheezy-resume/resume/releases).
 
 Or install with `go`:
 
-    go install github.com/braheezy-resume/resmark@latest
+    go install github.com/braheezy-resume/resumerk@latest
 
 Or clone the project and run from source:
 
@@ -15,9 +17,9 @@ Or clone the project and run from source:
 
 ## Usage
 
-    resmark sample.md
+    resumerk sample.md
 
-This converts the file into `sample.html` and `sample.pdf`.
+This converts the file into `sample.html` and `sample.pdf`. The output files are named according to the name of the input file.
 
-## CSS
-By default, the `default.css` file is applied to the HTML before rendering. The file can be changed with the `cssFile` argument. CSS can be skipped entirely by adding the `-nocss` flag.
+## CSS and JS
+CSS and Javascript can be injected into the generated HTML or completely ignored. Use the `-help` flag to see the options.
