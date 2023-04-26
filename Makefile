@@ -25,7 +25,7 @@ help:
 	@echo "$$help_text"
 
 build:
-	@goreleaser build --snapshot --rm-dist
+	@goreleaser build --snapshot --clean
 	@echo -e "${GREEN}Build is complete!${END}"
 
 clean:
