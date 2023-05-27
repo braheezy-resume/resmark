@@ -23,3 +23,8 @@ This converts the file into `sample.html` and `sample.pdf`. The output files are
 
 ## CSS and JS
 CSS and Javascript can be injected into the generated HTML or completely ignored. Use the `-help` flag to see the options.
+
+## Special Thanks
+This project wouldn't exist without this guy's project. Particularly, the CSS that makes the resume actually look like a resume wouldn't exist.
+
+https://github.com/mikepqr/resume.md
