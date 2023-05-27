@@ -68,24 +68,33 @@ func check(err error) {
 	}
 }
 
-func writeMdToHtml(inFile string, outFile string, cssContents []byte, jsContents []byte) {
-	outFile, err := filepath.Abs(outFile)
+func writeMdToHtml(markdownFile string, htmlFile string, cssContents []byte, jsContents []byte) {
+	htmlFile, err := filepath.Abs(htmlFile)
 	check(err)
-	inFile, err = filepath.Abs(inFile)
+	markdownFile, err = filepath.Abs(markdownFile)
 	check(err)
 
-	mdData, err := os.ReadFile(inFile)
+	mdData, err := os.ReadFile(markdownFile)
 	check(err)
+	// Force all line endings to Unix line endings
 	mdData = markdown.NormalizeNewlines(mdData)
+	// Enable extra Markdown features when parsing
+	// CommonExtensions: Sane defaults expected in most Markdown docs
+	// AutoHeadingIDs: Create the heading ID from the text
 	extensions := parser.CommonExtensions | parser.AutoHeadingIDs
 	p := parser.NewWithExtensions(extensions)
 
+	// Run the parser on the Markdown data, generating the AST,
+	// an abstract representation of the information
 	doc := p.Parse(mdData)
 
+	// Similar to the parser, setup a renderer with certain features (flags) enabled
+	// HrefTargetBlank: Add a blank target
 	htmlFlags := html.CommonFlags | html.HrefTargetBlank
 	opts := html.RendererOptions{Flags: htmlFlags}
 	renderer := html.NewRenderer(opts)
 
+	// Turn the AST into HTML
 	html := markdown.Render(doc, renderer)
 
 	t, err := template.New("webpage").Parse(htmlTemplate)
@@ -101,7 +110,7 @@ func writeMdToHtml(inFile string, outFile string, cssContents []byte, jsContents
 		CSSContent: template.CSS(cssContents),
 		JSContent:  template.JS(jsContents),
 	}
-	f, err := os.Create(outFile)
+	f, err := os.Create(htmlFile)
 	check(err)
 	defer f.Close()
 
@@ -109,10 +118,10 @@ func writeMdToHtml(inFile string, outFile string, cssContents []byte, jsContents
 	check(err)
 }
 
-func writeHtmlToPdf(inFile string, outFile string) {
-	outFile, err := filepath.Abs(outFile)
+func writeHtmlToPdf(htmlFile string, pdfFile string) {
+	pdfFile, err := filepath.Abs(pdfFile)
 	check(err)
-	inFile, err = filepath.Abs(inFile)
+	htmlFile, err = filepath.Abs(htmlFile)
 	check(err)
 
 	// create context
@@ -121,11 +130,11 @@ func writeHtmlToPdf(inFile string, outFile string) {
 
 	// capture pdf
 	var buf []byte
-	if err := chromedp.Run(ctx, printToPDF(fmt.Sprintf("file://%v", inFile), &buf)); err != nil {
+	if err := chromedp.Run(ctx, printToPDF(fmt.Sprintf("file://%v", htmlFile), &buf)); err != nil {
 		log.Fatal(err)
 	}
 
-	if err := os.WriteFile(outFile, buf, 0644); err != nil {
+	if err := os.WriteFile(pdfFile, buf, 0644); err != nil {
 		log.Fatal(err)
 	}
 }
